@@ -36,6 +36,20 @@ class Bookmark:
         except:
             return None
 
+class Collection:
+    def __init__(self):
+        self.Author = {}
+    
+    def add(self, bookmark):
+        book = bookmark.GetBook()
+        author = bookmark.GetAuthor()
+        if author not in self.Author.keys():
+            self.Author[author] = {}
+        if book not in self.Author[author].keys():
+            self.Author[author][book] = []
+        # append highlight
+        self.Author[author][book].append(bookmark)
+
 class KoboReader:
     def __init__(self, db_path):
         self.db_path = db_path
@@ -46,20 +60,46 @@ class KoboReader:
         c.execute("SELECT Type, Text, VolumeID, ContentID, DateModified, DateCreated FROM Bookmark WHERE Type='highlight'")
         highlights = c.fetchall()
         conn.close()
-        bookmarks = {}
+        coll = Collection()
         for highlight in highlights:
             bookmark = Bookmark(highlight[0], highlight[1], highlight[2], highlight[3], highlight[4], highlight[5])
             author = bookmark.GetAuthor()
-            if author not in bookmarks:
-                bookmarks[author] = []
-            bookmarks[author].append(bookmark)
-        return bookmarks
+            if author is None:
+                continue # fix?
+            book = bookmark.GetBook()
+            
+            coll.add(bookmark)
+
+            
+
+        return coll
 
 
 
-kobo_bookmarks = KoboReader(kobo_path).get_highlights()
+collection = KoboReader(kobo_path).get_highlights()
 
-print(kobo_bookmarks.keys())
+for author in collection.Author:
+    print('~'*50)
+    print(author)
+    books = collection.Author[author]
+    for book in books:
+        print('BOOK!!!!!!!!!!!!!!')
+        print(book)
+        for bookmark in books[book]:
+            print(bookmark.Text)
+            print(bookmark.DateModified)
+            print(bookmark.DateCreated)
+            print()
+
+# for author in kobo_bookmarks.keys():
+#     print('~'*50)
+#     print(author)
+#     books = kobo_bookmarks[author]
+#     for book in books:
+#         print(book.GetBook())
+#         for bookmark in books:
+#             print(bookmark.Text)
+
 
 
 # for bookmark in (kobo_bookmarks):

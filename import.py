@@ -84,6 +84,7 @@ class Collection:
         with open(file, "w") as f:
 
             for book in books:
+                print(book)
                 f.write(f'# {book}\n')
                 
                 for bookmark in books[book]:

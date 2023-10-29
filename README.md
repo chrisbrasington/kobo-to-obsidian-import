@@ -53,7 +53,7 @@ Open a terminal window and navigate to the root directory of the project.
 1. Run the kobo_to_obsidian.py script using the following command:
 1. The program will retrieve the highlights from the Kobo database and save them to a Markdown file in the Obsidian vault. The file will be named after the author of the book and will be located in the root directory of the vault.
 ```bash
-python kobo_to_obsidian.py
+python import.py
 ```
 4. The program will retrieve the highlights from the Kobo database and save them to a Markdown file in the Obsidian vault. The file will be named after the author of the book and will be located in the root directory of the vault.
 

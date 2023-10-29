@@ -3,11 +3,13 @@ import sqlite3
 import json
 import os
 
+# region Settings
 with open('settings.json') as f:
     settings = json.load(f)
 
 kobo_path = settings['kobo_path']
 obsidian_path = settings['obsidian_path']
+# endregion
 
 class Bookmark:
     def __init__(self, bookmark_type, text, volume_id, content_id, date_modified, date_created):
@@ -44,20 +46,28 @@ class KoboReader:
         c.execute("SELECT Type, Text, VolumeID, ContentID, DateModified, DateCreated FROM Bookmark WHERE Type='highlight'")
         highlights = c.fetchall()
         conn.close()
-        bookmarks = []
+        bookmarks = {}
         for highlight in highlights:
             bookmark = Bookmark(highlight[0], highlight[1], highlight[2], highlight[3], highlight[4], highlight[5])
-            bookmarks.append(bookmark)
+            author = bookmark.GetAuthor()
+            if author not in bookmarks:
+                bookmarks[author] = []
+            bookmarks[author].append(bookmark)
         return bookmarks
+
+
 
 kobo_bookmarks = KoboReader(kobo_path).get_highlights()
 
-for bookmark in (kobo_bookmarks):
-    # print(bookmark)
-    print(bookmark.GetAuthor())
-    # print(os.path.splitext(bookmark.GetBook())[0])
-    print(bookmark.GetBook())
-    print('~'*50)
+print(kobo_bookmarks.keys())
+
+
+# for bookmark in (kobo_bookmarks):
+#     # print(bookmark)
+#     print(bookmark.GetAuthor())
+#     # print(os.path.splitext(bookmark.GetBook())[0])
+#     print(bookmark.GetBook())
+#     print('~'*50)
 
 # sample = kobo_bookmarks[-1]
 

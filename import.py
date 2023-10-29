@@ -4,7 +4,14 @@ import json
 import os, sys
 
 # region Settings
-with open('settings.json') as f:
+settings_file = 'settings.json'
+
+# Check if an argument is provided from the command line
+if len(sys.argv) > 1:
+    # If an argument is provided, use it as the settings file path
+    settings_file = sys.argv[1]
+
+with open(settings_file) as f:
     settings = json.load(f)
 
 kobo_path = settings['kobo_path']
@@ -154,11 +161,13 @@ class Collection:
             for book in books:
                 print(f'{book} - {len(books[book])} highlights')
                 f.write(f'# {book}\n')
-                
+                f.write('---\n')
                 for bookmark in books[book]:
                     f.write(f'##### {bookmark.Text}\n')
                     f.write(f'**Location**: {bookmark.GetLocationFriendly()}\n')
                     f.write(f'**Date**: {bookmark.DateModified}\n')
+                    f.write('---\n')
+                    
 
 
 # Define a class called KoboReader

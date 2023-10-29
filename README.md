@@ -24,6 +24,12 @@ This project really isn't about *second brain* however it is about adding your r
 
 A good intro to the concept is this video by [Matt D'Avella -  I learned a productivity system for organizing life ](https://www.youtube.com/watch?v=0_44XEVOwek) or [Building a Second Brain by Tiago Forte](https://www.overdrive.com/media/8033824/building-a-second-brain)
 
+## What is markdown?
+
+Well this is a markdown file. It's a really quick way to write content with easy headers and table of contents.
+
+[See the raw code behind of this file here - README.md](https://raw.githubusercontent.com/chrisbrasington/kobo-to-obsidian-import/main/README.md)
+
 ## Dependencies
 
 - Python 3.x

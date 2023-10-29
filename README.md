@@ -6,7 +6,7 @@ This program reads highlights directly from a Kobo e-reader and exports them int
 
 ## What is Kobo (e-reader)?
 
-A Kobo e-reader is more open than an amazon kindle, supporing epub, custom configuration settings, and easy read of sqlite database of bookmarks and collections under `device\.kobo\KoboReader.sqlite`
+A [Kobo e-reader](https://us.kobobooks.com/pages/why-ereading) is more open than an amazon kindle - no ads, supporing epub, drag-drop usb, custom configuration settings, and easy read of sqlite database of bookmarks and collections under `device\.kobo\KoboReader.sqlite`
 
 ## What is Obsidian (note-taking - knowledge-base) ?
 

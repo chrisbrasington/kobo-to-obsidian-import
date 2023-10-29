@@ -15,7 +15,7 @@ class Bookmark:
     def __init__(self, bookmark_type, text, volume_id, content_id, 
                  date_modified, date_created, container_start):
         self.Type = bookmark_type
-        self.Text = text
+        self.Text = text.strip()
         self.VolumeID = volume_id
         self.ContentID = content_id
         self.DateCreated = date_created
@@ -29,11 +29,12 @@ class Bookmark:
         try:
             return self.VolumeID.split('/onboard/')[1].split('/')[0].rstrip('_')
         except:
-            return None
+            # return None
+            return 'Unknown'
 
     def GetBook(self):
         try:
-            book = self.VolumeID.split('/')[-1].split(' - ')[0].replace('_', ':')
+            book = self.VolumeID.split('/')[-1].split(' - ')[0].replace('_', "'")
             return os.path.splitext(book)[0] # unlikely to still have extension
         except:
             return None
@@ -67,6 +68,29 @@ class Collection:
         # append highlight
         self.Author[author][book].append(bookmark)
 
+    def export(self, author, output):
+
+        if not os.path.exists(output):
+            os.makedirs(output)
+
+        file = f'{output}/{author}.md'
+        print(file)
+
+        if os.path.exists(file):
+            os.remove(file)
+
+        books = self.Author[author]
+        
+        with open(file, "w") as f:
+
+            for book in books:
+                f.write(f'# {book}\n')
+                
+                for bookmark in books[book]:
+                    f.write(f'##### {bookmark.Text}\n')
+                    f.write(f'**Location**: {bookmark.GetLocationFriendly()}\n')
+                    f.write(f'**Date**: {bookmark.DateModified}\n')
+
 class KoboReader:
     def __init__(self, db_path):
         self.db_path = db_path
@@ -86,7 +110,7 @@ class KoboReader:
             bookmark = Bookmark(highlight[0], highlight[1], highlight[2], highlight[3], highlight[4], highlight[5], highlight[6])
             author = bookmark.GetAuthor()
             if author is None:
-                continue # fix?
+                author = 'Unknown'
             book = bookmark.GetBook()
             
             coll.add(bookmark)
@@ -99,39 +123,16 @@ class KoboReader:
 
 collection = KoboReader(kobo_path).get_highlights()
 
-for author in collection.Author:
+for author in reversed(collection.Author):
     print('~'*50)
-    print(author)
     books = collection.Author[author]
-    for book in books:
-        print(book)
-        for bookmark in books[book]:
-            print(bookmark.Text)
-            print(bookmark.DateModified)
-            print(bookmark.DateCreated)
-            print(bookmark.GetLocationFriendly())
-            print()
+    collection.export(author, obsidian_path)
+    # for book in books:
+        # print(book)
+        # for bookmark in books[book]:
+        #     # print(bookmark.Text)
+        #     # print(bookmark.DateModified)
+        #     # print(bookmark.GetLocationFriendly())
+        #     # print()
+        #     print()
 
-# for author in kobo_bookmarks.keys():
-#     print('~'*50)
-#     print(author)
-#     books = kobo_bookmarks[author]
-#     for book in books:
-#         print(book.GetBook())
-#         for bookmark in books:
-#             print(bookmark.Text)
-
-
-
-# for bookmark in (kobo_bookmarks):
-#     # print(bookmark)
-#     print(bookmark.GetAuthor())
-#     # print(os.path.splitext(bookmark.GetBook())[0])
-#     print(bookmark.GetBook())
-#     print('~'*50)
-
-# sample = kobo_bookmarks[-1]
-
-# print(str(sample))
-# print()
-# print(sample.GetAuthor())

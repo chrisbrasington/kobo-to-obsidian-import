@@ -2,6 +2,24 @@
 
 This program reads highlights directly from a Kobo e-reader and exports them into an Obsidian vault. It uses Python and the SQLite3 library to connect to the Kobo database and retrieve the highlights, and then saves them to a Markdown file in the Obsidian vault.
 
+## What is Kobo?
+
+A Kobo e-reader is more open than an amazon kindle, supporing epub, custom configuration settings, and easy read of sqlite database of bookmarks and collections under `device\.kobo\KoboReader.sqlite`
+
+## What is Obsidian?
+
+[Obsidian](https://obsidian.md/) is a mardown text editor like [Typora](https://typora.io/) that works great for note-taking - allowing you to link between notes and search.
+
+## What is your second brain?
+
+If you're like me, you probably take a lot of notes but they get thrown away - lost in paper notebooks or disorganized text files.
+
+*Second brain* is really just a concept of aggreating that in a seachable way. [Obsidian](https://obsidian.md/) (or any text editor with folders or wiki) makes it easy to organize notes so you wind up with a file-sized repository of details at your disposal. Combine it with a conceptual productivity system like [PARA](https://fortelabs.com/blog/para/) (Project, Area, Resource, Archive) and you might find it transformative.
+
+This project really isn't about *second brain* however it is about adding your reading highlights into [Obsidian](https://obsidian.md/), so it is searchable within your *second brain* vault.
+
+A good intro to the concept is this video by [Matt D'Avella -  I learned a productivity system for organizing life ](https://www.youtube.com/watch?v=0_44XEVOwek)
+
 ## Dependencies
 
 - Python 3.x

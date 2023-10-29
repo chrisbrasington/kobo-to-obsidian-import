@@ -1,4 +1,4 @@
-# Kobo Highlights to Obsidian
+# Kobo Highlights to Obsidian (markdown)
 
 This program reads highlights directly from a Kobo e-reader and exports them into an Obsidian vault. It uses Python and the SQLite3 library to connect to the Kobo database and retrieve the highlights, and then saves them to a Markdown file in the Obsidian vault.
 

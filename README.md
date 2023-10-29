@@ -2,11 +2,11 @@
 
 This program reads highlights directly from a Kobo e-reader and exports them into an Obsidian vault. It uses Python and the SQLite3 library to connect to the Kobo database and retrieve the highlights, and then saves them to a Markdown file in the Obsidian vault.
 
-## What is Kobo?
+## What is Kobo (e-reader)?
 
 A Kobo e-reader is more open than an amazon kindle, supporing epub, custom configuration settings, and easy read of sqlite database of bookmarks and collections under `device\.kobo\KoboReader.sqlite`
 
-## What is Obsidian?
+## What is Obsidian (note-taking - knowledge-base) ?
 
 [Obsidian](https://obsidian.md/) is a mardown text editor like [Typora](https://typora.io/) that works great for note-taking - allowing you to link between notes and search.
 

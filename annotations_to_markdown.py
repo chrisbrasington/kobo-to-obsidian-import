@@ -1,10 +1,11 @@
 import sys
 import re
 from collections import defaultdict
+from datetime import datetime
 
 def parse_lua_file(file_path):
     """
-    Parse the Lua file to extract annotations and group them by chapter.
+    Parse the Lua file to extract annotations, page numbers, and group them by chapter.
     """
     annotations = defaultdict(list)
 
@@ -16,26 +17,30 @@ def parse_lua_file(file_path):
     matches = annotation_pattern.findall(content)
 
     for _, annotation_block in matches:
-        chapter_match = re.search(r'\["chapter\"] = \"(.*?)\"', annotation_block)
-        text_match = re.search(r'\["text\"] = \"(.*?)\"', annotation_block)
+        page_match = re.search(r'\["pageno\"] = (\d+)', annotation_block)
+        chapter_match = re.search(r'\["chapter\"] = "(.*?)"', annotation_block)
+        text_match = re.search(r'\["text\"] = "(.*?)"', annotation_block)
 
-        if chapter_match and text_match:
+        if chapter_match and text_match and page_match:
+            page_number = page_match.group(1)
             chapter = chapter_match.group(1)
             text = text_match.group(1)
-            annotations[chapter].append(text)
+            annotations[chapter].append((page_number, text))
 
     return annotations
 
 def annotations_to_markdown(annotations):
     """
-    Convert annotations grouped by chapter into Markdown format.
+    Convert annotations grouped by chapter into Markdown format with page numbers, indents, and datetime.
     """
     markdown_lines = []
-    for chapter, texts in annotations.items():
-        markdown_lines.append(f"# {chapter}")
+    for chapter, annotations_list in annotations.items():
+        markdown_lines.append(f"## {chapter}")  # Page header with chapter number
         markdown_lines.append("")  # Add a blank line after the header
-        for text in texts:
-            markdown_lines.append(f"- {text}")
+        for page_number, text in annotations_list:
+            markdown_lines.append(f"### Page {page_number}")  # Page number header
+            markdown_lines.append(f"> {text}")  # Indented annotation
+            markdown_lines.append(f"  - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")  # Datetime of annotation
         markdown_lines.append("")  # Add a blank line after each chapter
     return "\n".join(markdown_lines)
 

@@ -19,12 +19,13 @@ def parse_lua_file(file_path):
     for _, annotation_block in matches:
         page_match = re.search(r'\["pageno\"] = (\d+)', annotation_block)
         chapter_match = re.search(r'\["chapter\"] = "(.*?)"', annotation_block)
-        text_match = re.search(r'\["text\"] = "(.*?)"', annotation_block)
+        text_match = re.search(r'\["text"\]\s*=\s*"((?:[^"\\]|\\.)*)"', annotation_block, re.DOTALL)
 
         if chapter_match and text_match and page_match:
             page_number = page_match.group(1)
             chapter = chapter_match.group(1)
             text = text_match.group(1)
+            text = text.replace('\r', ' ').replace('[', '').replace(']', '').replace('\n',' ')
             annotations[chapter].append((page_number, text))
 
     return annotations

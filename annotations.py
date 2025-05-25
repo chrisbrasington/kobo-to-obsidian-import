@@ -25,7 +25,8 @@ def parse_lua_file(file_path):
             page_number = page_match.group(1)
             chapter = chapter_match.group(1)
             text = text_match.group(1)
-            text = text.replace('\r', ' ').replace('[', '').replace(']', '').replace('\n',' ')
+            text = text.replace('\r', ' ').replace('[', '').replace(']', '').replace('\n',' ').replace('\\','')
+            
             annotations[chapter].append((page_number, text))
 
     return annotations

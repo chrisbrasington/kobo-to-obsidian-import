@@ -1,4 +1,8 @@
 {
     "kobo_path": "/media/chris/KOBOeReader/.kobo/KoboReader.sqlite",
-    "obsidian_path": "/home/chris/obsidian/brain/03 - Resources/Books/highlights"
+    "obsidian_path": "/home/chris/obsidian/brain/03 - Resources/Books/highlights",
+	"color_yellow": "> [!question] Yellow quote",
+	"color_red": "> [!danger] Red quote",
+	"color_green": "> [!success] Green quote",
+	"color_blue": "> [!info] Blue quote"
 }

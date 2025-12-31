@@ -170,19 +170,20 @@ class Collection:
                 f.write('\n---\n\n')
                 for bookmark in books[book]:
                     if bookmark.Color == 0:
-                        quote = settings['color_yellow']
+                        quote = settings['callout_yellow']
                     elif bookmark.Color == 1:
-                        quote = settings['color_red']
+                        quote = settings['callout_red']
                     elif bookmark.Color == 2:
-                        quote = settings['color_blue']
+                        quote = settings['callout_blue']
                     elif bookmark.Color == 3:
-                        quote = settings['color_green']
+                        quote = settings['callout_green']
                     else:
-                        quote = settings['color_yellow']
+                        quote = settings['callout_yellow']
                     f.write(f'{quote}\n{bookmark.Text}\n\n')
+
                     if bookmark.Type == 'note' and bookmark.Annotation is not None:
-                        # TODO: Add annotation with format
-                        pass
+                        f.write(f'\n{settings["annotation"]}\n{bookmark.Annotation}\n\n')
+
                     f.write(f'**Location**: {bookmark.GetLocationFriendly()}\n')
                     f.write(f'**Date**: {bookmark.DateModified}\n')
                     f.write('\n---\n')

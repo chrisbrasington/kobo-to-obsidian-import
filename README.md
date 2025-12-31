@@ -45,10 +45,11 @@ Well this is a markdown file. It's a really quick way to write content with easy
 {
 	"kobo_path": "/Volumes/KOBOeReader/.kobo/KoboReader.sqlite",
 	"obsidian_path": "/Users/username/Documents/Obsidian/Vault",
-	"color_yellow": "> [!question] Yellow quote",
-	"color_red": "> [!danger] Red quote",
-	"color_green": "> [!success] Green quote",
-	"color_blue": "> [!info] Blue quote"
+	"callout_yellow": "> [!quote] #yellow_quote",
+	"callout_red": "> [!danger] #red_quote",
+	"callout_green": "> [!success] #green_quote",
+	"callout_blue": "> [!info] #blue_quote",
+	"annotation": "> [!example] #annotation"
 }
 ```
 ## Usage

@@ -1,3 +1,4 @@
 dev
 *.lua
 *.md
+settings.json.bak*

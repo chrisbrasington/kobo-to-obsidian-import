@@ -32,10 +32,12 @@ class Highlight:
     - DateCreated (str): The date when the highlight was created.
     - DateModified (str): The date when the highlight was last modified.
     - Location (str): The location of the highlight in the book.
+    - Annotation (str): The user annotation of the highlight.
+    - Color (int): The color of the highlight.
     """
 
     def __init__(self, bookmark_type, text, volume_id, content_id,
-                 date_modified, date_created, container_start):
+                 date_modified, date_created, container_start, annotation, color):
         """
         Initializes a new instance of the Highlight class.
 
@@ -49,18 +51,20 @@ class Highlight:
         - container_start (str): The location of the highlight in the book.
         """
         self.Type = bookmark_type
-        self.Text = text.strip()
+        self.Text = text.strip() if text is not None else text
         self.VolumeID = volume_id
         self.ContentID = content_id
         self.DateCreated = date_created
         self.DateModified = date_modified if date_modified is not None else date_created
         self.Location = container_start
+        self.Annotation = annotation
+        self.Color = color
 
     def __str__(self):
         """
         Returns a string representation of the Highlight object.
         """
-        return f"Type: {self.Type}\nText: {self.Text}\nVolumeID: {self.VolumeID}\nContentID: {self.ContentID}\nDateModified: {self.DateModified}Location: {self.Location}"
+        return f"Type: {self.Type}\nText: {self.Text}\nVolumeID: {self.VolumeID}\nContentID: {self.ContentID}\nDateModified: {self.DateModified}Location: {self.Location}\nAnnotation: {self.Annotation}\nColor: {self.Color}"
 
     def GetAuthor(self):
         """
@@ -163,9 +167,23 @@ class Collection:
             for book in books:
                 print(f'{book} - {len(books[book])} highlights')
                 f.write(f'# {book}\n')
-                f.write('\n---\n')
+                f.write('\n---\n\n')
                 for bookmark in books[book]:
-                    f.write(f'> [!quote] {bookmark.Text}\n\n')
+                    if bookmark.Color == 0:
+                        quote = settings['callout_yellow']
+                    elif bookmark.Color == 1:
+                        quote = settings['callout_red']
+                    elif bookmark.Color == 2:
+                        quote = settings['callout_blue']
+                    elif bookmark.Color == 3:
+                        quote = settings['callout_green']
+                    else:
+                        quote = settings['callout_yellow']
+                    f.write(f'{quote}\n{bookmark.Text}\n\n')
+
+                    if bookmark.Type == 'note' and bookmark.Annotation is not None:
+                        f.write(f'\n{settings["annotation"]}\n{bookmark.Annotation}\n\n')
+
                     f.write(f'**Location**: {bookmark.GetLocationFriendly()}\n')
                     f.write(f'**Date**: {bookmark.DateModified}\n')
                     f.write('\n---\n')
@@ -189,7 +207,7 @@ class KoboReader:
         # Create a cursor object to execute SQL commands
         c = conn.cursor()
         # Execute a SQL command to select all highlights from the Bookmark table
-        c.execute("SELECT Type, Text, VolumeID, ContentID, DateModified, DateCreated, StartContainerPath FROM Bookmark WHERE Type='highlight'")
+        c.execute("SELECT Type, Text, VolumeID, ContentID, DateModified, DateCreated, StartContainerPath, Annotation, Color  FROM Bookmark WHERE Type in ('highlight','note')")
         # Fetch all the highlights from the cursor object
         highlights = c.fetchall()
         # Close the connection to the database
@@ -198,7 +216,7 @@ class KoboReader:
         coll = Collection()
         # Loop through all the highlights and add them to the Collection object
         for highlight in highlights:
-            bookmark = Highlight(highlight[0], highlight[1], highlight[2], highlight[3], highlight[4], highlight[5], highlight[6])
+            bookmark = Highlight(highlight[0], highlight[1], highlight[2], highlight[3], highlight[4], highlight[5], highlight[6], highlight[7], highlight[8])
             author = bookmark.GetAuthor()
             if author is None:
                 author = 'Unknown'

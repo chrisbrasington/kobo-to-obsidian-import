@@ -39,12 +39,17 @@ Well this is a markdown file. It's a really quick way to write content with easy
 
 1. Clone the repository to your local machine.
 2. Install Python and the SQLite3 library if you haven't already.
-3. Open the `settings.json` file and update the `kobo_path` and `obsidian_path` variables to match the paths to your Kobo device and Obsidian vault, respectively.
+3. Open the `settings.json` file and update the `kobo_path` and `obsidian_path` variables to match the paths to your Kobo device and Obsidian vault, respectively. Then update the color variables to match whatever callout you prefer. For more information go to [help.obsidian.md/callouts](https://help.obsidian.md/callouts).
 
 ```json
 {
-    "kobo_path": "/Volumes/KOBOeReader/.kobo/KoboReader.sqlite",
-    "obsidian_path": "/Users/username/Documents/Obsidian/Vault"
+	"kobo_path": "/Volumes/KOBOeReader/.kobo/KoboReader.sqlite",
+	"obsidian_path": "/Users/username/Documents/Obsidian/Vault",
+	"callout_yellow": "> [!quote] #yellow_quote",
+	"callout_red": "> [!danger] #red_quote",
+	"callout_green": "> [!success] #green_quote",
+	"callout_blue": "> [!info] #blue_quote",
+	"annotation": "> [!example] #annotation"
 }
 ```
 ## Usage

@@ -55,11 +55,11 @@ Well this is a markdown file. It's a really quick way to write content with easy
 ## Usage
 1. Connect your Kobo device to your computer and mount it as a drive.
 Open a terminal window and navigate to the root directory of the project.
-1. Run the kobo_to_obsidian.py script using the following command:
-1. The program will retrieve the highlights from the Kobo database and save them to a Markdown file in the Obsidian vault. The file will be named after the author of the book and will be located in the root directory of the vault.
+1. Run the import.py script using the following command
 ```bash
 python import.py
 ```
+1. The program will retrieve the highlights from the Kobo database and save them to a Markdown file in the Obsidian vault. The file will be named after the author of the book and will be located in the root directory of the vault.
 4. The program will retrieve the highlights from the Kobo database and save them to a Markdown file in the Obsidian vault. The file will be named after the author of the book and will be located in the root directory of the vault.
 
 ## Troubleshooting

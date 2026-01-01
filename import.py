@@ -1,7 +1,9 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+
 import sqlite3
 import json
-import os, sys
+import os
+import sys
 
 # region Settings
 settings_file = 'settings.json'
@@ -32,7 +34,7 @@ class Highlight:
     - Location (str): The location of the highlight in the book.
     """
 
-    def __init__(self, bookmark_type, text, volume_id, content_id, 
+    def __init__(self, bookmark_type, text, volume_id, content_id,
                  date_modified, date_created, container_start):
         """
         Initializes a new instance of the Highlight class.
@@ -59,7 +61,7 @@ class Highlight:
         Returns a string representation of the Highlight object.
         """
         return f"Type: {self.Type}\nText: {self.Text}\nVolumeID: {self.VolumeID}\nContentID: {self.ContentID}\nDateModified: {self.DateModified}Location: {self.Location}"
-    
+
     def GetAuthor(self):
         """
         Returns the author of the book that the highlight belongs to.
@@ -85,7 +87,7 @@ class Highlight:
             return os.path.splitext(book)[0] # unlikely to still have extension
         except:
             return None
-        
+
     def GetLocationFriendly(self):
         """
         Returns a human-readable version of the location of the highlight.
@@ -121,7 +123,7 @@ class Collection:
         Initializes an empty dictionary of authors and their books and highlights.
         """
         self.Author = {}
-    
+
     def add(self, bookmark):
         """
         Adds a highlight to the collection.
@@ -155,19 +157,19 @@ class Collection:
             os.remove(file)
 
         books = self.Author[author]
-        
+
         with open(file, "w") as f:
 
             for book in books:
                 print(f'{book} - {len(books[book])} highlights')
                 f.write(f'# {book}\n')
-                f.write('---\n')
+                f.write('\n---\n')
                 for bookmark in books[book]:
-                    f.write(f'##### {bookmark.Text}\n')
+                    f.write(f'> [!quote] {bookmark.Text}\n\n')
                     f.write(f'**Location**: {bookmark.GetLocationFriendly()}\n')
                     f.write(f'**Date**: {bookmark.DateModified}\n')
-                    f.write('---\n')
-                    
+                    f.write('\n---\n')
+
 
 
 # Define a class called KoboReader
@@ -200,7 +202,7 @@ class KoboReader:
             author = bookmark.GetAuthor()
             if author is None:
                 author = 'Unknown'
-            book = bookmark.GetBook()       
+            book = bookmark.GetBook()
             coll.add(bookmark)
         # Return the Collection object with all the highlights
         return coll

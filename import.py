@@ -188,6 +188,34 @@ class Collection:
                     f.write(f'**Date**: {bookmark.DateModified}\n')
                     f.write('\n---\n')
 
+class WordList:
+    def __init__(self, db_path):
+        self.db_path = db_path
+        self.words = []
+
+    def get_words(self):
+        words = []
+        try:
+            conn = sqlite3.connect(self.db_path)
+        except:
+            print(f"Error connecting to {self.db_path}")
+            sys.exit()
+        c = conn.cursor()
+        try:
+            # The columns on the WordList table are: Text|VolumeId|DictSuffix|DateCreated
+            c.execute("SELECT Text FROM WordList")
+            words = c.fetchall()
+        except:
+            print(f"Error getting words from {self.db_path}")
+        finally:
+            conn.close()
+        return words
+
+    def export(self, output):
+        words = self.get_words()
+        with open(f'{output}/Words.md', 'w') as f:
+            for word in words:
+                f.write(f"- {word[0]}\n")
 
 
 # Define a class called KoboReader
@@ -198,6 +226,7 @@ class KoboReader:
 
     # Method that retrieves all highlights from the Kobo database
     def get_highlights(self):
+        highlights = []
         # Try to connect to the Kobo database
         try:
             conn = sqlite3.connect(self.db_path)
@@ -206,12 +235,17 @@ class KoboReader:
             sys.exit()
         # Create a cursor object to execute SQL commands
         c = conn.cursor()
-        # Execute a SQL command to select all highlights from the Bookmark table
-        c.execute("SELECT Type, Text, VolumeID, ContentID, DateModified, DateCreated, StartContainerPath, Annotation, Color  FROM Bookmark WHERE Type in ('highlight','note')")
-        # Fetch all the highlights from the cursor object
-        highlights = c.fetchall()
-        # Close the connection to the database
-        conn.close()
+        try:
+            # Execute a SQL command to select all highlights from the Bookmark table
+            c.execute("SELECT Type, Text, VolumeID, ContentID, DateModified, DateCreated, StartContainerPath, Annotation, Color  FROM Bookmark WHERE Type in ('highlight','note')")
+            # Fetch all the highlights from the cursor object
+            highlights = c.fetchall()
+        except:
+            print(f"Error getting highlights from {self.db_path}")
+            sys.exit()
+        finally:
+            # Close the connection to the database
+            conn.close()
         # Create a Collection object to store the highlights
         coll = Collection()
         # Loop through all the highlights and add them to the Collection object
@@ -228,6 +262,8 @@ class KoboReader:
 
 # Create a Collection object called "collection" by calling the get_highlights method of a KoboReader object with the path to the Kobo database as an argument
 collection = KoboReader(kobo_path).get_highlights()
+
+words = WordList(kobo_path).export(obsidian_path)
 
 # Loop through all the authors in the Collection object in reverse order
 for author in reversed(collection.Author):

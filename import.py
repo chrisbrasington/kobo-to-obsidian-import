@@ -188,6 +188,29 @@ class Collection:
                     f.write(f'**Date**: {bookmark.DateModified}\n')
                     f.write('\n---\n')
 
+class WordList:
+    def __init__(self, db_path):
+        self.db_path = db_path
+        self.words = []
+
+    def get_words(self):
+        try:
+            conn = sqlite3.connect(self.db_path)
+        except:
+            print(f"Error connecting to {self.db_path}")
+            sys.exit()
+        c = conn.cursor()
+        # The columns on the WordList table are: Text|VolumeId|DictSuffix|DateCreated
+        c.execute("SELECT Text FROM WordList")
+        words = c.fetchall()
+        conn.close()
+        return words
+
+    def export(self, output):
+        words = self.get_words()
+        with open(f'{output}/Words.md', 'w') as f:
+            for word in words:
+                f.write(f"- {word[0]}\n")
 
 
 # Define a class called KoboReader
@@ -228,6 +251,8 @@ class KoboReader:
 
 # Create a Collection object called "collection" by calling the get_highlights method of a KoboReader object with the path to the Kobo database as an argument
 collection = KoboReader(kobo_path).get_highlights()
+
+words = WordList(kobo_path).export(obsidian_path)
 
 # Loop through all the authors in the Collection object in reverse order
 for author in reversed(collection.Author):

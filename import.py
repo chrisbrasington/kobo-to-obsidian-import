@@ -194,16 +194,21 @@ class WordList:
         self.words = []
 
     def get_words(self):
+        words = []
         try:
             conn = sqlite3.connect(self.db_path)
         except:
             print(f"Error connecting to {self.db_path}")
             sys.exit()
         c = conn.cursor()
-        # The columns on the WordList table are: Text|VolumeId|DictSuffix|DateCreated
-        c.execute("SELECT Text FROM WordList")
-        words = c.fetchall()
-        conn.close()
+        try:
+            # The columns on the WordList table are: Text|VolumeId|DictSuffix|DateCreated
+            c.execute("SELECT Text FROM WordList")
+            words = c.fetchall()
+        except:
+            print(f"Error getting words from {self.db_path}")
+        finally:
+            conn.close()
         return words
 
     def export(self, output):
@@ -221,6 +226,7 @@ class KoboReader:
 
     # Method that retrieves all highlights from the Kobo database
     def get_highlights(self):
+        highlights = []
         # Try to connect to the Kobo database
         try:
             conn = sqlite3.connect(self.db_path)
@@ -229,12 +235,17 @@ class KoboReader:
             sys.exit()
         # Create a cursor object to execute SQL commands
         c = conn.cursor()
-        # Execute a SQL command to select all highlights from the Bookmark table
-        c.execute("SELECT Type, Text, VolumeID, ContentID, DateModified, DateCreated, StartContainerPath, Annotation, Color  FROM Bookmark WHERE Type in ('highlight','note')")
-        # Fetch all the highlights from the cursor object
-        highlights = c.fetchall()
-        # Close the connection to the database
-        conn.close()
+        try:
+            # Execute a SQL command to select all highlights from the Bookmark table
+            c.execute("SELECT Type, Text, VolumeID, ContentID, DateModified, DateCreated, StartContainerPath, Annotation, Color  FROM Bookmark WHERE Type in ('highlight','note')")
+            # Fetch all the highlights from the cursor object
+            highlights = c.fetchall()
+        except:
+            print(f"Error getting highlights from {self.db_path}")
+            sys.exit()
+        finally:
+            # Close the connection to the database
+            conn.close()
         # Create a Collection object to store the highlights
         coll = Collection()
         # Loop through all the highlights and add them to the Collection object

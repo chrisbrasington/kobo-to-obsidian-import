@@ -1,6 +1,6 @@
 # Kobo Highlights to Obsidian (markdown)
 
-This program reads highlights directly from a Kobo e-reader and exports them into an Obsidian vault. It uses Python and the SQLite3 library to connect to the Kobo database and retrieve the highlights, and then saves them to a Markdown file in the Obsidian vault.
+This program reads highlights, notes, and markups (drawings) directly from a Kobo e-reader and exports them into an Obsidian vault. It uses Python and the SQLite3 library to connect to the Kobo database and retrieve the highlights, and then saves them to a Markdown file in the Obsidian vault.
 
 ![Alt text](.img/image.png)
 
@@ -34,12 +34,14 @@ Well this is a markdown file. It's a really quick way to write content with easy
 
 - Python 3.x
 - SQLite3 library
+- The packages in `requirements.txt` (`Pillow`, `CairoSVG`), installed with `pip install -r requirements.txt`. `Pillow` and `CairoSVG` are used for markups.
 
 ## Setup
 
 1. Clone the repository to your local machine.
 2. Install Python and the SQLite3 library if you haven't already.
-3. Open the `settings.json` file and update the `kobo_path` and `obsidian_path` variables to match the paths to your Kobo device and Obsidian vault, respectively. Then update the color variables to match whatever callout you prefer. For more information go to [help.obsidian.md/callouts](https://help.obsidian.md/callouts).
+3. Install dependencies with `pip install -r requirements.txt`
+4. Open the `settings.json` file and update the `kobo_path` and `obsidian_path` variables to match the paths to your Kobo device and Obsidian vault, respectively. Then update the color variables to match whatever callout you prefer. For more information go to [help.obsidian.md/callouts](https://help.obsidian.md/callouts).
 
 ```json
 {
@@ -49,9 +51,14 @@ Well this is a markdown file. It's a really quick way to write content with easy
 	"callout_red": "> [!danger] #red_quote",
 	"callout_green": "> [!success] #green_quote",
 	"callout_blue": "> [!info] #blue_quote",
-	"annotation": "> [!example] #annotation"
+	"annotation": "> [!example] #annotation",
+	"markups": true,
+	"markups_dir": "",
+	"attachments_dir": "attachments",
+	"markup_callout": "> [!example] #markup"
 }
 ```
+The `markups` keys are optional: `markups_dir` defaults to the `markups` folder next to `KoboReader.sqlite` (It's like this on Kobo Libra Colour), and `attachments_dir` to `attachments` inside the obsidian_path/.
 ## Usage
 1. Connect your Kobo device to your computer and mount it as a drive.
 Open a terminal window and navigate to the root directory of the project.
@@ -59,6 +66,9 @@ Open a terminal window and navigate to the root directory of the project.
 ```bash
 python import.py
 ```
+You can pass another settings file as an argument: `python import.py my_settings.json`
+
+Markups (drawings on the page) are also exported: each one is rendered as a single image (the drawing composited over the page) and embedded inside the configured callout, with the images stored in `attachments/markups/` in your vault.
 1. The program will retrieve the highlights from the Kobo database and save them to a Markdown file in the Obsidian vault. The file will be named after the author of the book and will be located in the root directory of the vault.
 4. The program will retrieve the highlights from the Kobo database and save them to a Markdown file in the Obsidian vault. The file will be named after the author of the book and will be located in the root directory of the vault.
 
@@ -66,6 +76,7 @@ python import.py
 - If you encounter any errors while running the program, make sure that the paths in the settings.json file are correct and that your Kobo device is mounted as a drive.
 - If you have trouble connecting to the Kobo database, try restarting your computer or disconnecting and reconnecting the device.
 - If you have trouble exporting the highlights to the Obsidian vault, make sure that the path to the vault is correct and that you have write permissions for the directory.
+- If markups are not exported, make sure CairoSVG is installed (Python module or CLI) and that the `markups` folder exists next to the database.
 
 ## Sample Output
 
@@ -82,3 +93,7 @@ python import.py
 ##### Posthuman. It was a word that came up in the media every five or six years, and it meant different things every time. Neural regrowth hormone? Posthuman. Sex robots with inbuilt pseudo intelligence? Posthuman. Self-optimizing network routing? Posthuman. It was a word from advertising copy, breathless and empty, and all he’d ever thought it really meant was that the people using it had a limited imagination about what exactly humans were capable of.
 **Location**: Page (049) Point (/1/4/28/1:349)
 **Date**: 2023-10-29T20:37:56.482
+
+### Markup sample output
+
+![Markups sample output](.img/image-2.png)
